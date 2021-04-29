@@ -6,6 +6,9 @@ namespace UnitTests
 {
     public class UnitTest
     {
+        /// <summary>
+        /// 
+        /// </summary>
         [Fact]
         public void FirstDuplicateTest()
         {
@@ -15,6 +18,9 @@ namespace UnitTests
             Assert.True(result == 3);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         [Fact]
         public void firstNotRepeatingCharacterTest()
         {
