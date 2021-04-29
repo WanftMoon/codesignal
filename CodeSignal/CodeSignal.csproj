@@ -7,5 +7,7 @@
 
   <ItemGroup>
     <Folder Include="InterviewPratice\" />
+    <Folder Include="Arcade\" />
+    <Folder Include="Arcade\Intro\" />
   </ItemGroup>
 </Project>
