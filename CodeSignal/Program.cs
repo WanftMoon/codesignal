@@ -13,7 +13,7 @@ namespace CodeSignal
 
         static void Main(string[] args)
         {
-            EdgeOfTheOcean.AlmostIncreasingSequence(new int[] { 1, 3, 2, 1 });
+            SmoothSailing.isLucky(1230);
         }
     }
 }
