@@ -149,5 +149,101 @@ namespace CodeSignal.Arcade.Intro
             return (sumFirstHalf == sumSecondHalf);
         }
 
+
+        /// <remarks>
+        /// Some people are standing in a row in a park. There are trees between them which cannot be moved. Your task is to rearrange the people by their heights in a non-descending order without moving the trees. People can be very tall!
+        ///
+        /// Example
+        ///
+        /// For a = [-1, 150, 190, 170, -1, -1, 160, 180], the output should be
+        /// sortByHeight(a) = [-1, 150, 160, 170, -1, -1, 180, 190].
+        ///
+        /// Input/Output
+        ///
+        /// [execution time limit] 3 seconds(cs)
+        ///
+        /// [input]
+        /// array.integer a
+        ///
+        /// If a[i] = -1, then the ith position is occupied by a tree.Otherwise a[i] is the height of a person standing in the ith position.
+        ///
+        /// Guaranteed constraints:
+        /// 1 ≤ a.length ≤ 1000,
+        /// -1 ≤ a[i] ≤ 1000.
+        ///
+        /// [output] array.integer
+        ///
+        /// Sorted array a with all the trees untouched.
+        /// </remarks>
+        public static int[] SortByHeight(int[] a)
+        {
+            //get people
+            var people = a.Where(p => p != -1).ToList();
+            int index = 0;
+
+            //sort people
+            people.Sort();
+
+            for(int i = 0; i < a.Length; i++)
+            {
+                if (a[i] != -1)
+                    a[i] = people[index++];
+            }
+
+            return (a);
+        }
+
+
+        /// <remarks>
+        /// Write a function that reverses characters in (possibly nested) parentheses in the input string.
+        /// 
+        /// Input strings will always be well-formed with matching()s.
+        /// 
+        /// Example
+        /// 
+        /// For inputString = "(bar)", the output should be
+        /// reverseInParentheses(inputString) = "rab";
+        /// For inputString = "foo(bar)baz", the output should be
+        /// reverseInParentheses(inputString) = "foorabbaz";
+        /// For inputString = "foo(bar)baz(blim)", the output should be
+        /// reverseInParentheses(inputString) = "foorabbazmilb";
+        /// For inputString = "foo(bar(baz))blim", the output should be
+        /// reverseInParentheses(inputString) = "foobazrabblim".
+        /// Because "foo(bar(baz))blim" becomes "foo(barzab)blim" and then "foobazrabblim".
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input]
+        /// string inputString
+        /// 
+        /// A string consisting of lowercase English letters and the characters(and ). It is guaranteed that all parentheses in inputString form a regular bracket sequence.
+        /// 
+        /// Guaranteed constraints:
+        /// 0 ≤ inputString.length ≤ 50.
+        /// 
+        /// 
+        /// [output] string
+        /// 
+        /// Return inputString, with all the characters that were in parentheses reversed.
+        /// </remarks>
+        public static string ReverseInParentheses(string inputString)
+        {
+            //get the last (
+            int lid = inputString.LastIndexOf('(');
+
+            if (lid == -1)
+                return inputString;
+            else
+            {
+                //get the first ) after the (
+                int rid = inputString.IndexOf(')', lid);
+
+                //get the index up to the last (, concatenate the reversed string in the parenthesis we found, and add the remainder, keep doing it
+                return ReverseInParentheses(inputString.Substring(0, lid) + new string(inputString.Substring(lid + 1, rid - lid - 1).Reverse().ToArray()) + inputString.Substring(rid + 1));
+            }
+        }
+
+
     }
 }
