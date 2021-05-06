@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+
 namespace CodeSignal.Arcade.Intro
 {
     public class RainsOfSeason
@@ -135,6 +137,89 @@ namespace CodeSignal.Arcade.Intro
             return (true);
         }
 
+
+        /// <remarks>
+        /// Given a string, your task is to replace each of its characters by the next one in the English alphabet; i.e. replace a with b, replace b with c, etc (z would be replaced by a).
+        /// 
+        /// Example
+        /// 
+        /// /// For inputString = "crazy", the output should be alphabeticShift(inputString) = "dsbaz".
+        /// 
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input]
+        /// string inputString
+        /// 
+        /// A non-empty string consisting of lowercase English characters.
+        /// 
+        /// Guaranteed constraints:
+        /// 1 ≤ inputString.length ≤ 1000.
+        /// 
+        /// [output] string
+        /// 
+        /// The resulting string after replacing each of its characters.
+        /// string.Concat(inputString.Select(_ => ++_ > 'z' ? 'a' : _));
+        /// </remarks>
+        public static string AlphabeticShift(string inputString)
+        {
+            StringBuilder str = new StringBuilder(inputString);
+
+            for (int i = 0; i < str.Length; i++)
+            {
+                if (str[i] == 'z')
+                    str[i] = 'a';
+                else
+                    str[i] = (char)(str[i] + 1);
+            }
+
+            return (str.ToString());
+        }
+
+        /// <remarks>
+        /// Given two cells on the standard chess board, determine whether they have the same color or not.
+        /// 
+        /// Example
+        /// 
+        /// For cell1 = "A1" and cell2 = "C3", the output should be
+        /// chessBoardCellColor(cell1, cell2) = true.
+        /// 
+        /// 
+        /// 
+        /// For cell1 = "A1" and cell2 = "H3", the output should be
+        /// chessBoardCellColor(cell1, cell2) = false.
+        /// 
+        /// 
+        /// 
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input]
+        ///  string cell1
+        /// 
+        /// Guaranteed constraints:
+        /// cell1.length = 2,
+        /// 'A' ≤ cell1[0] ≤ 'H',
+        /// 1 ≤ cell1[1] ≤ 8.
+        /// 
+        /// [input]
+        ///  string cell2
+        /// 
+        /// Guaranteed constraints:
+        /// cell2.length = 2,
+        /// 'A' ≤ cell2[0] ≤ 'H',
+        /// 1 ≤ cell2[1] ≤ 8.
+        /// 
+        /// [output] boolean
+        /// 
+        /// true if both cells have the same color, false otherwise.
+        /// </remarks>
+        public static bool ChessBoardCellColor(string cell1, string cell2)
+        {
+            return ((cell1[0] + cell1[1] + cell2[0] + cell2[1]) % 2 == 0);
+        }
 
     }
 }
