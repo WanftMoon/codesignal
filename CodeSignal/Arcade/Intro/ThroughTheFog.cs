@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+
 namespace CodeSignal.Arcade.Intro
 {
     public class ThroughTheFog
@@ -104,6 +106,154 @@ namespace CodeSignal.Arcade.Intro
             }
 
             return (year);
+        }
+
+
+        /// <remarks>
+        /// Given a sorted array of integers a, your task is to determine which element of a is closest to all other values of a. In other words, find the element x in a, which minimizes the following sum:
+        /// 
+        /// abs(a[0] - x) + abs(a[1] - x) + ... + abs(a[a.length - 1] - x)
+        /// (where abs denotes the absolute value)
+        /// 
+        /// If there are several possible answers, output the smallest one.
+        /// 
+        /// Example
+        /// 
+        /// For a = [2, 4, 7], the output should be absoluteValuesSumMinimization(a) = 4.
+        /// 
+        /// for x = 2, the value will be abs(2 - 2) + abs(4 - 2) + abs(7 - 2) = 7.
+        /// for x = 4, the value will be abs(2 - 4) + abs(4 - 4) + abs(7 - 4) = 5.
+        /// for x = 7, the value will be abs(2 - 7) + abs(4 - 7) + abs(7 - 7) = 8.
+        /// The lowest possible value is when x = 4, so the answer is 4.
+        /// 
+        /// For a = [2, 3], the output should be absoluteValuesSumMinimization(a) = 2.
+        /// 
+        /// for x = 2, the value will be abs(2 - 2) + abs(3 - 2) = 1.
+        /// for x = 3, the value will be abs(2 - 3) + abs(3 - 3) = 1.
+        /// Because there is a tie, the smallest x between x = 2 and x = 3 is the answer.
+        /// 
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input]
+        /// array.integer a
+        /// 
+        /// A non-empty array of integers, sorted in ascending order.
+        /// 
+        /// Guaranteed constraints:
+        /// 1 ≤ a.length ≤ 1000,
+        /// -106 ≤ a[i] ≤ 106.
+        /// 
+        /// [output] integer
+        /// 
+        /// An integer representing the element from a that minimizes the sum of its absolute differences with all other elements.
+        /// A[(A.Length - 1) / 2];
+        /// </remarks>
+        public static int AbsoluteValuesSumMinimization(int[] a)
+        {
+            int index = a.Length / 2;
+
+            if (a.Length % 2 == 0)
+                return (a[index - 1]);
+
+            return (a[index]);
+        }
+
+        /// <remarks>
+        /// Given an array of equal-length strings, you'd like to know if it's possible to rearrange the order of the elements in such a way that each consecutive pair of strings differ by exactly one character. Return true if it's possible, and false if not.
+        ///
+        /// Note: You're only rearranging the order of the strings, not the order of the letters within the strings!
+        /// 
+        /// Example
+        /// 
+        /// For inputArray = ["aba", "bbb", "bab"], the output should be
+        /// stringsRearrangement(inputArray) = false.
+        /// 
+        /// There are 6 possible arrangements for these strings:
+        /// 
+        /// ["aba", "bbb", "bab"]
+        /// ["aba", "bab", "bbb"]
+        /// ["bbb", "aba", "bab"]
+        /// ["bbb", "bab", "aba"]
+        /// ["bab", "bbb", "aba"]
+        /// ["bab", "aba", "bbb"]
+        /// None of these satisfy the condition of consecutive strings differing by 1 character, so the answer is false.
+        /// 
+        /// For inputArray = ["ab", "bb", "aa"], the output should be
+        /// stringsRearrangement(inputArray) = true.
+        /// 
+        /// It's possible to arrange these strings in a way that each consecutive pair of strings differ by 1 character (eg: "aa", "ab", "bb" or "bb", "ab", "aa"), so return true.
+        /// 
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input] array.string inputArray
+        /// 
+        /// A non-empty array of strings of lowercase letters.
+        /// 
+        /// Guaranteed constraints:
+        /// 2 ≤ inputArray.length ≤ 10,
+        /// 1 ≤ inputArray[i].length ≤ 15.
+        /// 
+        /// [output]
+        /// boolean
+        /// 
+        /// Return true if the strings can be reordered in such a way that each neighbouring pair of strings differ by exactly one character(false otherwise).
+        /// 
+        /// </remarks>
+        public static bool stringsRearrangement(string[] inputArray)
+        {
+            for (int i = 0; i < inputArray.Length; i++)
+            {
+                var remaining = inputArray.Where((p, index) => i != index).ToArray();
+
+                if (stringsRearrangmentEx(inputArray[i], remaining))
+                    return (true);
+            }
+
+
+            return (false);
+        }
+
+        /// <summary>
+        /// helper stringsRearrangment
+        /// </summary>        
+        private static bool stringsRearrangmentEx(string current, string[] inputArray)
+        {
+            if (inputArray.Length == 0)
+                return (true);
+
+            for (int i = 0; i < inputArray.Length; i++)
+            {
+                var remaining = inputArray.Where((p, index) => i != index).ToArray();
+
+                if (!Differences(current, inputArray[i]))
+                    continue;
+
+                if (stringsRearrangmentEx(inputArray[i], remaining))
+                    return (true);
+            }
+
+
+            return (false);
+        }
+
+        /// <summary>
+        /// helper stringsRearrangment
+        /// </summary>        
+        private static bool Differences(string current, string candidate)
+        {
+            int diffs = 0;
+
+            for (int i = 0; i < current.Length; i++)
+            {
+                if (current[i] != candidate[i])
+                    diffs++;
+            }
+
+            return (diffs == 1);
         }
 
     }
