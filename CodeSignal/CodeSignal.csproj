@@ -9,5 +9,6 @@
     <Folder Include="InterviewPratice\" />
     <Folder Include="Arcade\" />
     <Folder Include="Arcade\Intro\" />
+    <Folder Include="Arcade\TheCore\" />
   </ItemGroup>
 </Project>
