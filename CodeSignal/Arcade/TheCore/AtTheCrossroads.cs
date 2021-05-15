@@ -327,5 +327,90 @@ namespace CodeSignal.Arcade.TheCore
             (score1 == 6 || score2 == 6) && (score1 <= 6 && score2 <= 6) && score1 != score2;
         }
 
+        /// <remarks>
+        /// Once Mary heard a famous song, and a line from it stuck in her head. That line was "Will you still love me when I'm no longer young and beautiful?". Mary believes that a person is loved if and only if he/she is both young and beautiful, but this is quite a depressing thought, so she wants to put her belief to the test.
+        /// 
+        /// Knowing whether a person is young, beautiful and loved, find out if they contradict Mary's belief.
+        /// 
+        /// A person contradicts Mary's belief if one of the following statements is true:
+        /// 
+        /// they are young and beautiful but not loved;
+        /// they are loved but not young or not beautiful.
+        /// Example
+        /// 
+        /// For young = true, beautiful = true, and loved = true, the output should be
+        /// willYou(young, beautiful, loved) = false.
+        /// 
+        /// Young and beautiful people are loved according to Mary's belief.
+        /// 
+        /// For young = true, beautiful = false, and loved = true, the output should be
+        /// willYou(young, beautiful, loved) = true.
+        /// 
+        /// Mary doesn't believe that not beautiful people can be loved.
+        /// 
+        /// Input/Output
+        /// 
+        /// [execution time limit] 0.5 seconds(cpp)
+        /// 
+        /// [input]
+        ///  boolean young
+        /// 
+        /// [input] boolean beautiful
+        /// 
+        /// [input] boolean loved
+        /// 
+        /// [output] boolean
+        /// 
+        /// true if the person contradicts Mary's belief, false otherwise.
+        ///  loved != young && beautiful
+        /// </remarks>
+        public static bool WillYou(bool young, bool beautiful, bool loved)
+        {
+            return ((young && beautiful && !loved) || (loved && !young) || (loved && !beautiful));
+        }
+
+        /// <remarks>
+        /// You just bought a public transit card that allows you to ride the Metro for a certain number of days.
+        /// 
+        ///     Here is how it works: upon first receiving the card, the system allocates you a 31-day pass, which equals the number of days in January.The second time you pay for the card, your pass is extended by 28 days, i.e.the number of days in February(note that leap years are not considered), and so on.The 13th time you extend the pass, you get 31 days again.
+        /// 
+        ///     You just ran out of days on the card, and unfortunately you've forgotten how many times your pass has been extended so far. However, you do remember the number of days you were able to ride the Metro during this most recent month. Figure out the number of days by which your pass will now be extended, and return all the options as an array sorted in increasing order.
+        /// 
+        /// 
+        ///     Example
+        /// 
+        ///     For lastNumberOfDays = 30, the output should be
+        ///     metroCard(lastNumberOfDays) = [31].
+        ///     
+        /// 
+        ///     There are 30 days in April, June, September and November, so the next months to consider are May, July, October or December.All of them have exactly 31 days, which means that you will definitely get a 31-days pass the next time you extend your card.
+        /// 
+        ///     Input/Output
+        /// 
+        ///     [execution time limit] 3 seconds (cs)
+        /// 
+        ///     [input] integer lastNumberOfDays
+        /// 
+        ///     A positive integer, the number of days for which the card was extended the last time.
+        /// 
+        /// 
+        ///     Guaranteed constraints:
+        /// lastNumberOfDays = 28 or lastNumberOfDays = 30 or lastNumberOfDays = 31.
+        ///     
+        /// 
+        ///     [output] array.integer
+        /// 
+        ///     An array of positive integers, the possible number of days for which you will extend your pass. The elements of the array can only be equal to 28, 30 or 31 and must be sorted in increasing order.
+        /// 
+        /// 
+        /// </remarks>
+        public static int[] metroCard(int lastNumberOfDays)
+        {
+            return (lastNumberOfDays == 28 || lastNumberOfDays == 30 ? new int[] { 31 } : new int[] { 28, 30, 31 });
+        }
+
+
+        
+
     }
 }
