@@ -140,5 +140,198 @@ namespace CodeSignal.Arcade.TheCore
             return (sum);
         }
 
+        /// <remarks>
+        /// Reverse the order of the bits in a given integer.
+        /// 
+        /// Example
+        /// 
+        /// For a = 97, the output should be
+        /// mirrorBits(a) = 67.
+        /// 
+        /// 97 equals to 1100001 in binary, which is 1000011 after mirroring, and that is 67 in base 10.
+        /// 
+        /// For a = 8, the output should be
+        /// mirrorBits(a) = 1.
+        /// 
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input]
+        /// integer a
+        /// 
+        /// Guaranteed constraints:
+        /// 5 ≤ a ≤ 105.
+        /// 
+        /// [output] integer
+        /// 
+        /// 
+        /// </remarks>
+        public static int mirrorBits(int a)
+        {
+            int val = 0;
+
+            while (a > 0)
+            {
+                int bit = a & 0x01;
+                val = val << 1;
+                val = val + bit;
+                a = a >> 1;
+            }
+
+            return (val);
+        }
+
+
+        /// <remarks>
+        /// Implement the missing code, denoted by ellipses. You may not modify the pre-existing code.
+        ///  Presented with the integer n, find the 0-based position of the second rightmost zero bit in its binary representation(it is guaranteed that such a bit exists), counting from right to left.
+        /// 
+        /// Return the value of 2position_of_the_found_bit.
+        /// 
+        /// Example
+        /// 
+        /// For n = 37, the output should be
+        /// secondRightmostZeroBit(n) = 8.
+        /// 
+        /// 3710 = 1001012. The second rightmost zero bit is at position 3 (0-based) from the right in the binary representation of n.
+        /// Thus, the answer is 23 = 8.
+        /// 
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input]
+        ///         integer n
+        /// 
+        /// Guaranteed constraints:
+        /// 4 ≤ n ≤ 230.
+        /// 
+        /// [output] integer
+        /// </remarks>
+        public static int secondRightmostZeroBit(int n)
+        {
+            return ~n & ((n | (n + 1)) + 1);
+        }
+
+        /// <remarks>
+        /// Implement the missing code, denoted by ellipses. You may not modify the pre-existing code.
+        /// You're given an arbitrary 32-bit integer n. Take its binary representation, split bits into it in pairs (bit number 0 and 1, bit number 2 and 3, etc.) and swap bits in each pair. Then return the result as a decimal number.
+        /// 
+        /// Example
+        /// 
+        /// For n = 13, the output should be
+        /// swapAdjacentBits(n) = 14.
+        /// 
+        /// 1310 = 11012 ~> {11}{01}2 ~> 11102 = 1410.
+        /// 
+        /// For n = 74, the output should be
+        /// swapAdjacentBits(n) = 133.
+        /// 
+        /// 7410 = 010010102 ~> {01}{00}{10}{10}2 ~> 100001012 = 13310.
+        /// Note the preceding zero written in front of the initial number: since both numbers are 32-bit integers, they have 32 bits in their binary representation.The preceding zeros in other cases don't matter, so they are omitted. Here, however, it does make a difference.
+        /// 
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input]
+        ///         integer n
+        /// 
+        /// Guaranteed constraints:
+        /// 0 ≤ n< 230.
+        /// 
+        /// [output] integer
+        /// </remarks>
+        public static int swapAdjacentBits(int n)
+        {
+            return (int)((n & 0x55555555) << 1) | (int)((n & 0xAAAAAAAA) >> 1);
+        }
+
+
+        /// <remarks>
+        /// Implement the missing code, denoted by ellipses. You may not modify the pre-existing code.
+        /// You're given two integers, n and m. Find position of the rightmost bit in which they differ in their binary representations (it is guaranteed that such a bit exists), counting from right to left.
+        /// 
+        /// Return the value of 2position_of_the_found_bit(0-based).
+        /// 
+        /// Example
+        /// 
+        /// For n = 11 and m = 13, the output should be
+        /// differentRightmostBit(n, m) = 2.
+        /// 
+        /// 1110 = 10112, 1310 = 11012, the rightmost bit in which they differ is the bit at position 1 (0-based) from the right in the binary representations.
+        /// So the answer is 21 = 2.
+        /// 
+        /// For n = 7 and m = 23, the output should be
+        /// differentRightmostBit(n, m) = 16.
+        /// 
+        /// 710 = 1112, 2310 = 101112, i.e.
+        /// 
+        /// 00111
+        /// 10111
+        /// So the answer is 24 = 16.
+        /// 
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input]
+        /// integer n
+        /// 
+        /// Guaranteed constraints:
+        /// 0 ≤ n ≤ 230.
+        /// 
+        /// [input]
+        /// integer m
+        /// 
+        /// Guaranteed constraints:
+        /// 0 ≤ m ≤ 230,
+        /// n ≠ m.
+        /// 
+        /// [output] integer
+        /// </remarks>
+        public static int differentRightmostBit(int n, int m)
+        {
+            return (n ^ m) & -(n ^ m);
+        }
+
+        /// <remarks>
+        /// Implement the missing code, denoted by ellipses. You may not modify the pre-existing code.
+        /// You're given two integers, n and m. Find position of the rightmost pair of equal bits in their binary representations (it is guaranteed that such a pair exists), counting from right to left.
+        /// 
+        /// Return the value of 2position_of_the_found_pair(0-based).
+        /// 
+        /// Example
+        /// 
+        /// For n = 10 and m = 11, the output should be
+        /// equalPairOfBits(n, m) = 2.
+        /// 
+        /// 1010 = 10102, 1110 = 10112, the position of the rightmost pair of equal bits is the bit at position 1 (0-based) from the right in the binary representations.
+        /// So the answer is 21 = 2.
+        /// 
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input]
+        ///         integer n
+        /// 
+        /// Guaranteed constraints:
+        /// 0 ≤ n ≤ 230.
+        /// 
+        /// [input]
+        /// integer m
+        /// 
+        /// Guaranteed constraints:
+        /// 0 ≤ m ≤ 230.
+        /// 
+        /// [output] integer
+        /// </remarks>
+        public static int equalPairOfBits(int n, int m)
+        {
+            return ~(n ^ m) & -(~(n ^ m));
+        }
+
     }
 }

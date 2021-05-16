@@ -404,13 +404,9 @@ namespace CodeSignal.Arcade.TheCore
         /// 
         /// 
         /// </remarks>
-        public static int[] metroCard(int lastNumberOfDays)
+        public static int[] MetroCard(int lastNumberOfDays)
         {
             return (lastNumberOfDays == 28 || lastNumberOfDays == 30 ? new int[] { 31 } : new int[] { 28, 30, 31 });
         }
-
-
-        
-
     }
 }
