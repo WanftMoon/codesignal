@@ -413,5 +413,266 @@ namespace CodeSignal.Arcade.TheCore
             return (false);
         }
 
+        /// <remarks>
+        /// Some people run along a straight line in the same direction. They start simultaneously at pairwise distinct positions and run with constant speed (which may differ from person to person).
+        /// 
+        /// If two or more people are at the same point at some moment we call that a meeting.The number of people gathered at the same point is called meeting cardinality.
+        /// 
+        /// For the given starting positions and speeds of runners find the maximum meeting cardinality assuming that people run infinitely long. If there will be no meetings, return -1 instead.
+        /// 
+        /// Example
+        /// 
+        /// For startPosition = [1, 4, 2] and speed = [27, 18, 24], the output should be
+        /// runnersMeetings(startPosition, speed) = 3.
+        /// 
+        /// In 20 seconds after the runners start running, they end up at the same point.Check out the gif below for better understanding:
+        /// 
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds (cs)
+        /// 
+        /// [input] array.integer startPosition
+        /// 
+        /// 
+        /// A non-empty array of integers representing starting positions of runners (in meters).
+        /// 
+        /// Guaranteed constraints:
+        /// 2 ≤ startPosition.length ≤ 100,
+        /// -104 ≤ startPosition[i] ≤ 104.
+        /// 
+        /// [input]
+        ///         array.integer speed
+        /// 
+        /// Array of positive integers of the same length as startPosition representing speeds of the runners(in meters per minute).
+        /// 
+        /// Guaranteed constraints:
+        /// speed.length = startPosition.length,
+        /// 1 ≤ speed[i] ≤ 100.
+        /// 
+        /// [output]
+        ///         integer
+        /// 
+        /// The maximum meeting cardinality or -1 if there will be no meetings.
+        /// </remarks>
+        public static int RunnersMeetings(int[] startPosition, int[] speed)
+        {
+            int best = -1;
+
+            for (int i = 0; i < startPosition.Length; i++)
+            {
+                for (int j = i + 1; j < startPosition.Length; j++)
+                {
+                    //calc time when both are at the same position
+                    //V.T=D (V0.T = V1.T) 
+                    int dx = startPosition[j] - startPosition[i];
+                    int dy = speed[i] - speed[j];
+
+                    //dy = 0
+                    if (dy == 0) continue;
+
+                    double t = (double)dx / (double)dy;
+
+                    //count how many occurencies V.T + pos = D
+                    int count = startPosition.Where((p, index) => speed[index] * t + p == speed[i] * t + startPosition[i]).Count();
+
+                    best = Math.Max(count, best);
+                }
+            }
+
+            return best;
+        }
+
+
+        /// <remarks>
+        /// It's Christmas time! To share his Christmas spirit with all his friends, the young Christmas Elf decided to send each of them a Christmas e-mail with a nice Christmas tree. Unfortunately, Internet traffic is very expensive in the North Pole, so instead of sending an actual image he got creative and drew the tree using nothing but asterisks ('*' symbols). He has given you the specs (see below) and your task is to write a program that will generate trees following the spec and some initial parameters.
+        /// 
+        /// Here is a formal definition of how the tree should be built, but before you read it the Elf HIGHLY recommends first looking at the examples that follow:
+        /// 
+        /// Each tree has a crown as follows:
+        /// 
+        ///  *
+        ///  *
+        /// ***
+        /// Define a line as a horizontal group of asterisks and a level as a collection of levelHeight lines stacked one on top of the other.
+        /// 
+        /// Below the crown there are levelNum levels.
+        /// 
+        /// The tree is perfectly symmetrical so all the middle asterisks of the lines lie on the center of the tree.
+        /// 
+        /// Each line of the same level (excluding the first one) has two more asterisks than the previous one(one added to each end);
+        /// 
+        ///         The number of asterisks in the first line of each level is chosen as follows:
+        /// 
+        /// the first line of the first level has 5 asterisks;
+        /// the first line of each consecutive level contains two more asterisks than the first line of the previous level.
+        /// And finally there is the tree foot which has a height of levelNum and a width of:
+        /// 
+        /// levelHeight asterisks if levelHeight is odd;
+        /// levelHeight + 1 asterisks if levelHeight is even.
+        /// Given levelNum and levelHeight, return the Christmas tree of the young elf.
+        /// 
+        /// Example
+        /// 
+        /// For levelNum = 1 and levelHeight = 3, the output should be
+        /// 
+        /// christmasTree(levelNum, levelHeight) =
+        ///     ["    *",
+        ///      "    *",
+        ///      "   ***",
+        ///      "  *****",
+        ///      " *******",
+        ///      "*********",
+        ///      "   ***"]
+        /// , which represents the following tree:
+        /// 
+        ///             ___
+        ///       *        |
+        ///       *        |-- the crown      
+        ///      ***    ___|       
+        ///     *****      |
+        ///    *******     |-- level 1
+        ///   ********* ___|
+        ///      ***    ___|-- the foot
+        /// For levelNum = 2 and levelHeight = 4, the output should be
+        /// 
+        /// christmasTree(levelNum, levelHeight) = 
+        ///     ["      *",
+        ///      "      *",
+        ///      "     ***",
+        ///      "    *****",
+        ///      "   *******",
+        ///      "  *********",
+        ///      " ***********",
+        ///      "   *******",
+        ///      "  *********",
+        ///      " ***********",
+        ///      "*************",
+        ///      "    *****",
+        ///      "    *****"]
+        /// , which represents the following tree:
+        /// 
+        ///                 ___
+        ///         *          |
+        ///         *          | -- the crown
+        ///        ***      ___|
+        ///       *****        |
+        ///      *******       | -- level 1
+        ///     *********      |
+        ///    ***********  ___|
+        ///      *******       |
+        ///     *********      | -- level 2
+        ///    ***********     |
+        ///   ************* ___|
+        ///       *****        | -- the foot
+        ///       *****     ___|
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input]
+        ///         integer levelNum
+        /// 
+        /// A positive integer, the number of levels.
+        /// 
+        /// Guaranteed constraints:
+        /// 1 ≤ levelNum ≤ 25.
+        /// 
+        /// [input] integer levelHeight
+        /// 
+        /// The number of lines in each level.
+        /// 
+        /// Guaranteed constraints:
+        /// 1 ≤ levelHeight ≤ 25.
+        /// 
+        /// [output] array.string
+        /// 
+        /// The Christmas tree according to the specs and inputs. Output elements should not contain trailing whitespaces, and at least one of them should start with the '*' symbol.
+        /// </remarks>
+        public static string[] ChristmasTree(int levelNum, int levelHeight)
+        {
+            int crownHeight = 3;
+            int footHeight = levelNum;
+            int footWidth = levelHeight % 2 == 0 ? levelHeight + 1 : levelHeight;
+            int maxWidth = 5 + (levelNum + levelHeight - 2) * 2;
+            string[] tree = new string[crownHeight + footHeight + levelNum * levelHeight];
+            int index = 0;
+
+            //crown
+            tree[index++] = "*".PadLeft(maxWidth / 2 + 1, ' ');
+            tree[index++] = "*".PadLeft(maxWidth / 2 + 1, ' ');
+            tree[index++] = "***".PadLeft(maxWidth / 2 + 2, ' ');
+
+            //levels
+            for (int i = 0; i < levelNum; i++)
+            {
+                for (int j = 0; j < levelHeight; j++)
+                {
+                    string str = new string('*', 5 + (j + i) * 2);
+
+                    tree[index++] = str.PadLeft((maxWidth - str.Length) / 2 + str.Length, ' ');
+                }
+            }
+
+            //foot
+            for (int i = 0; i < footHeight; i++)
+            {
+                string str = new string('*', footWidth);
+
+                tree[index++] = str.PadLeft((maxWidth - str.Length) / 2 + str.Length, ' ');
+            }
+
+            return (tree);
+        }
+
+        /// <remarks>
+        /// You are given an array of desired filenames in the order of their creation. Since two files cannot have equal names,
+        /// the one which comes later will have an addition to its name in a form of (k), where k is the smallest positive integer such that the obtained name is not used yet.        /// 
+        /// Return an array of names that will be given to the files.
+        /// 
+        /// Example
+        /// 
+        /// For names = ["doc", "doc", "image", "doc(1)", "doc"], the output should be
+        /// fileNaming(names) = ["doc", "doc(1)", "image", "doc(1)(1)", "doc(2)"].
+        /// 
+        /// Input / Output
+        /// 
+        /// [execution time limit] 3 seconds (cs)
+        /// 
+        /// [input] array.string names
+        /// 
+        /// 
+        /// Guaranteed constraints:
+        /// 5 ≤ names.length ≤ 1000,
+        /// 1 ≤ names[i].length ≤ 15.
+        /// 
+        /// 
+        /// [output] array.string
+        /// </remarks>
+        public static string[] FileNaming(string[] names)
+        {
+            Dictionary<string, int> set = new Dictionary<string, int>();
+
+            for (int i = 0; i < names.Length; i++)
+            {
+                if (set.ContainsKey(names[i]))
+                {
+                    string key = names[i];
+                    int count = set[names[i]];
+                    string rename = $"{names[i]}({count})";
+
+                    //check while not avaiable
+                    while (set.ContainsKey(rename)) { rename = $"{names[i]}({++count})"; }
+
+                    names[i] = rename;
+                    set.Add(names[i], 1);
+                    set[key] += 1;
+                }
+                else
+                    set.Add(names[i], 1);
+            }
+
+            return (names);
+        }
+
     }
 }
