@@ -375,5 +375,200 @@ namespace CodeSignal.Arcade.TheCore
         }
 
 
+        /// <remarks>
+        /// You are watching a volleyball tournament, but you missed the beginning of the very first game of your favorite team. Now you're curious about how the coach arranged the players on the field at the start of the game.
+        /// 
+        /// The team you favor plays in the following formation:
+        /// 
+        /// 0 3 0
+        /// 4 0 2
+        /// 0 6 0
+        /// 5 0 1
+        /// where positive numbers represent positions occupied by players.After the team gains the serve, its members rotate one position in a clockwise direction, so the player in position 2 moves to position 1, the player in position 3 moves to position 2, and so on, with the player in position 1 moving to position 6.
+        /// 
+        /// Here's how the players change their positions:
+        /// 
+        /// Given the current formation of the team and the number of times k it gained the serve, find the initial position of each player in it.
+        /// 
+        /// Example
+        /// 
+        /// For
+        /// 
+        /// formation = [["empty", "Player5", "empty"],
+        ///              ["Player4", "empty",   "Player2"],
+        ///              ["empty",   "Player3", "empty"],
+        ///              ["Player6", "empty",   "Player1"]]
+        /// and k = 2, the output should be
+        /// 
+        /// volleyballPositions(formation, k) = [
+        ///     ["empty",   "Player1", "empty"],
+        ///     ["Player2", "empty",   "Player3"],
+        ///     ["empty",   "Player4", "empty"],
+        ///     ["Player5", "empty",   "Player6"]
+        /// ]
+        /// For
+        /// 
+        /// formation = [["empty", "Alice", "empty"],
+        ///              ["Bob", "empty", "Charlie"],
+        ///              ["empty", "Dave", "empty"],
+        ///              ["Eve", "empty", "Frank"]]
+        /// and k = 6, the output should be
+        /// 
+        /// volleyballPositions(formation, k) = [
+        ///     ["empty", "Alice", "empty"],
+        ///     ["Bob",   "empty", "Charlie"],
+        ///     ["empty", "Dave",  "empty"],
+        ///     ["Eve",   "empty", "Frank"]
+        /// ]
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input] array.array.string formation
+        /// 
+        /// Array of strings representing names of the players in the positions corresponding to those in the schema above.
+        /// It is guaranteed that for each empty position the corresponding element of formation is "empty".
+        /// It is also guaranteed that there is no player called "empty" in the team.
+        /// 
+        /// Guaranteed constraints:
+        /// formation.length = 4,
+        /// formation[i].length = 3.
+        /// 
+        /// [input] integer k
+        /// 
+        /// The number of times the team gained the serve.
+        /// 
+        /// Guaranteed constraints:
+        /// 0 ≤ k ≤ 109.
+        /// 
+        /// [output] array.array.string
+        /// 
+        /// Team arrangement at the start of the game.
+        /// </remarks>
+        public static string[][] VolleyballPositions(string[][] formation, int k)
+        {
+            for (int i = 0; i < k % 6; i++)
+            {
+                string temp = formation[0][1];
+
+                formation[0][1] = formation[1][2];
+                formation[1][2] = formation[3][2];
+                formation[3][2] = formation[2][1];
+                formation[2][1] = formation[3][0];
+                formation[3][0] = formation[1][0];
+                formation[1][0] = temp;
+            }
+
+            return (formation);
+        }
+
+        /// <remarks>
+        /// Consider a (2k+1) × (2k+1) square subarray of an integer integers matrix. Let's call the union of the square's two longest diagonals, middle column and middle row a star. Given the coordinates of the star's center in the matrix and its width, rotate it 45 · t degrees clockwise preserving position of all matrix elements that do not belong to the star.
+        /// 
+        ///         Example
+        /// 
+        ///         For
+        /// 
+        /// matrix = [[1, 0, 0, 2, 0, 0, 3],
+        ///           [0, 1, 0, 2, 0, 3, 0],
+        ///           [0, 0, 1, 2, 3, 0, 0],
+        ///           [8, 8, 8, 9, 4, 4, 4],
+        ///           [0, 0, 7, 6, 5, 0, 0],
+        ///           [0, 7, 0, 6, 0, 5, 0],
+        ///           [7, 0, 0, 6, 0, 0, 5]]
+        /// width = 7, center = [3, 3], and t = 1, the output should be
+        /// 
+        /// starRotation(matrix, width, center, t) = [[8, 0, 0, 1, 0, 0, 2],
+        ///                                           [0, 8, 0, 1, 0, 2, 0],
+        ///                                           [0, 0, 8, 1, 2, 0, 0],
+        ///                                           [7, 7, 7, 9, 3, 3, 3],
+        ///                                           [0, 0, 6, 5, 4, 0, 0],
+        ///                                           [0, 6, 0, 5, 0, 4, 0],
+        ///                                           [6, 0, 0, 5, 0, 0, 4]]
+        /// For
+        /// 
+        /// matrix = [[1, 0, 0, 2, 0, 0, 3],
+        ///           [0, 1, 0, 2, 0, 3, 0],
+        ///           [0, 0, 1, 2, 3, 0, 0],
+        ///           [8, 8, 8, 9, 4, 4, 4],
+        ///           [0, 0, 7, 6, 5, 0, 0]]
+        /// width = 3, center = [1, 5], and t = 81, the output should be
+        /// 
+        /// starRotation(matrix, width, center, t) = [[1, 0, 0, 2, 0, 0, 0],
+        ///                                           [0, 1, 0, 2, 3, 3, 3],
+        ///                                           [0, 0, 1, 2, 0, 0, 0],
+        ///                                           [8, 8, 8, 9, 4, 4, 4],
+        ///                                           [0, 0, 7, 6, 5, 0, 0]]
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input]
+        ///         array.array.integer matrix
+        /// 
+        /// A two-dimensional array of integers.
+        /// 
+        /// Guaranteed constraints:
+        /// 3 ≤ matrix.length ≤ 15,
+        /// 3 ≤ matrix[i].length ≤ 15,
+        /// matrix[i].length == matrix[j].length,
+        /// 0 ≤ matrix[i][j] ≤ 99.
+        /// 
+        /// [input] integer width
+        /// 
+        /// An odd integer representing the star's width. It equals the length of the sides of the bounding square for the star.
+        /// 
+        /// Guaranteed constraints:
+        /// 3 ≤ width ≤ min(matrix.length, matrix[i].length).
+        /// 
+        /// [input]
+        ///         array.integer center
+        /// 
+        /// An array of two integers.
+        /// 
+        /// Guaranteed constraints:
+        /// center.length = 2,
+        /// (width - 1) / 2 ≤ center[0] < matrix.length - (width - 1) / 2,
+        /// (width - 1) / 2 ≤ center[1] < matrix[i].length - (width - 1) / 2.
+        /// 
+        /// [input]
+        ///         integer t
+        /// 
+        /// A non-negative integer denoting how many times the star should be rotated by 45 degrees.
+        /// 
+        /// Guaranteed constraints:
+        /// 0 ≤ t ≤ 109.
+        /// 
+        /// [output]
+        ///         array.array.integer
+        /// 
+        /// An array with specified star rotated by 45 · t degrees.
+        /// </remarks>
+        public static int[][] StarRotation(int[][] matrix, int width, int[] center, int t)
+        {
+            int rowCenter = center[0];
+            int colCenter = center[1];
+
+            width /= 2;
+
+            for (int j = 0; j < t % 8; j++)
+            {
+                for (int i = 0; i < width; i++)
+                {
+                    int temp = matrix[rowCenter - width + i][colCenter - width + i];
+
+                    matrix[rowCenter - width + i][colCenter - width + i] = matrix[rowCenter][colCenter - width + i];
+                    matrix[rowCenter][colCenter - width + i] = matrix[rowCenter + width - i][colCenter - width + i];
+                    matrix[rowCenter + width - i][colCenter - width + i] = matrix[rowCenter + width - i][colCenter];
+                    matrix[rowCenter + width - i][colCenter] = matrix[rowCenter + width - i][colCenter + width - i];
+                    matrix[rowCenter + width - i][colCenter + width - i] = matrix[rowCenter][colCenter + width - i];
+                    matrix[rowCenter][colCenter + width - i] = matrix[rowCenter - width + i][colCenter + width - i];
+                    matrix[rowCenter - width + i][colCenter + width - i] = matrix[rowCenter - width + i][colCenter];
+                    matrix[rowCenter - width + i][colCenter] = temp;
+                }
+            }
+
+            return matrix;
+        }
     }
 }
