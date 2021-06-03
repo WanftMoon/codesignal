@@ -10,5 +10,6 @@
     <Folder Include="Arcade\" />
     <Folder Include="Arcade\Intro\" />
     <Folder Include="Arcade\TheCore\" />
+    <Folder Include="Arcade\Graphs\" />
   </ItemGroup>
 </Project>
