@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace CodeSignal.Arcade.TheCore
@@ -391,6 +392,410 @@ namespace CodeSignal.Arcade.TheCore
             }
 
             return (8 * count);
+        }
+
+
+        #region amazon checkmate
+
+        /// <remarks>
+        /// An amazon (also known as a queen + knight compound) is an imaginary chess piece that can move like a queen or a knight (or, equivalently, like a rook, bishop, or knight). The diagram below shows all squares which the amazon can attack from e4 (circles represent knight-like moves while crosses correspond to queen-like moves).
+        /// 
+        /// 
+        /// 
+        /// Recently, you've come across a diagram with only three pieces left on the board: a white amazon, the white king, and the black king. It's black's move. You don't have time to determine whether the game is over or not, but you'd like to figure it out in your head. Unfortunately, the diagram is smudged and you can't see the position of the black king, so you'll need to consider all possible positions.
+        /// 
+        /// Given the positions of the white pieces on a standard chessboard(using algebraic notation), your task is to determine the number of possible black king's positions such that:
+        /// 
+        /// it's checkmate (i.e. black's king is under the amazon's attack and it cannot make a valid move);
+        /// it's check (i.e. black's king is under the amazon's attack but it can reach a safe square in one move);
+        /// it's stalemate (i.e. black's king is on a safe square but it cannot make a valid move);
+        /// black's king is on a safe square and it can make a valid move.
+        /// Note that two kings cannot be placed on two adjacent squares(including two diagonally adjacent ones).
+        /// 
+        /// Example
+        /// 
+        /// For king = "d3" and amazon = "e4", the output should be
+        /// amazonCheckmate(king, amazon) = [5, 21, 0, 29].
+        /// 
+        /// Red crosses correspond to the checkmate positions, orange pluses refer to check positions, and green circles denote safe squares.
+        /// 
+        /// For king = "a1" and amazon = "g5", the output should be
+        /// amazonCheckmate(king, amazon) = [0, 29, 1, 29].
+        /// 
+        /// The stalemate position is marked by a blue square.
+        /// 
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input]
+        ///     string king
+        /// 
+        /// The position of the white king, in chess notation.
+        /// 
+        /// Guaranteed constraints:
+        /// king.length = 2,
+        /// 'a' ≤ king[0] ≤ 'h',
+        /// 1 ≤ king[1] ≤ 8.
+        /// 
+        /// [input] string amazon
+        /// 
+        /// The position of the white amazon, in the same notation.
+        /// 
+        /// Guaranteed constraints:
+        /// amazon.length = 2,
+        /// 'a' ≤ amazon[0] ≤ 'h',
+        /// 1 ≤ amazon[1] ≤ 8,
+        /// amazon ≠ king.
+        /// 
+        /// [output] array.integer
+        /// 
+        /// An array of four integers, each equal to the number of black's king positions corresponding to a specific situation. More specifically, the array should be of the form [checkmate positions, check positions, stalemate positions, safe positions].
+        /// </remarks>
+        public static int[] AmazonCheckmate(string king, string amazon)
+        {
+            //breaking all the moves
+            List<string> kingMoves = KingMoves(king);
+            List<string> amazonMoves = AmazonMoves(amazon, king, kingMoves);
+            List<string> atkMoves = new List<string>();
+            List<string> blackKingPos = BlackKingPositions(king, amazon, kingMoves);
+            int[] result = new int[4];
+
+            atkMoves.AddRange(kingMoves);
+            atkMoves.AddRange(amazonMoves);
+
+            foreach (var move in blackKingPos)
+            {
+                List<string> possibleMoves = KingMoves(move);
+
+                possibleMoves.Add(move);
+                possibleMoves = possibleMoves.Where(x => !atkMoves.Contains(x)).ToList();
+
+                //checkmate
+                if (possibleMoves.Count == 0)
+                    result[0]++;
+                else if (!possibleMoves.Contains(move) && possibleMoves.Count > 0)
+                    result[1]++;
+                else if (possibleMoves.Contains(move) && possibleMoves.Count == 1)
+                    result[2]++;
+                else if (possibleMoves.Contains(move) && possibleMoves.Count > 1)
+                    result[3]++;
+            }
+
+            return result;
+        }
+        /// <summary>
+        /// helper
+        /// </summary>
+        public static List<string> BlackKingPositions(string king, string amazon, List<string> kingMoves)
+        {
+            List<string> moves = new List<string>();
+
+            for (char i = '1'; i <= '8'; i++)
+            {
+                for (char j = 'a'; j <= 'h'; j++)
+                {
+                    string pos = $"{j}{i}";
+
+                    if (!king.Equals(pos) && !amazon.Equals(pos) && !kingMoves.Contains(pos))
+                        moves.Add(pos);
+                }
+            }
+
+            return (moves);
+        }
+        /// <summary>
+        /// helper
+        /// </summary>
+        public static List<string> AmazonMoves(string amazon, string king, List<string> kingMoves)
+        {
+            List<string> moves = new List<string>();
+
+            moves.AddRange(RookMoves(amazon, king, kingMoves));
+            moves.AddRange(BishopMoves(amazon, king, kingMoves));
+            moves.AddRange(KnightMoves(amazon, king, kingMoves));
+
+            return moves;
+        }
+        /// <summary>
+        /// helper
+        /// </summary>
+        public static List<string> KnightMoves(string amazon, string king, List<string> kingMoves)
+        {
+            int[][] moves = new int[][]{
+                new int[] { 2, -1}, new int[] { 2,  1},
+        new int[] { 1, -2},             new int[] {  1,  2},
+        new int[] {-1, -2},             new int[] {  -1, 2},
+                new int[] {-2, -1}, new int[] { -2, 1}};
+            List<string> possibleMoves = new List<string>();
+
+            for (int i = 0; i < moves.Length; i++)
+            {
+                int dx = amazon[1] + moves[i][0];
+                int dy = amazon[0] + moves[i][1];
+                string val = $"{(char)dy}{(char)dx}";
+
+                if (IsInBounds(dx, dy) && !king.Equals(val) && !kingMoves.Contains(val))
+                    possibleMoves.Add(val);
+            }
+
+            return possibleMoves;
+        }
+        /// <summary>
+        /// helper
+        /// </summary>
+        public static List<string> BishopMoves(string amazon, string king, List<string> kingMoves)
+        {
+            List<string> moves = new List<string>();
+            int x = amazon[1];
+            int y = amazon[0];
+
+            //left upper diag
+            for (int i = x + 1, j = y - 1; j >= 'a' && i <= '8'; j--, i++)
+            {
+                string pos = $"{(char)j}{(char)i}";
+                //king is blocking, abort
+                if (pos.Equals(king)) break;
+                //its inside the king range, avoid
+                if (kingMoves.Contains(pos)) continue;
+
+                moves.Add(pos);
+            }
+
+            //left lower diag
+            for (int i = x - 1, j = y - 1; j >= 'a' && i >= '1'; j--, i--)
+            {
+                string pos = $"{(char)j}{(char)i}";
+                //king is blocking, abort
+                if (pos.Equals(king)) break;
+                //its inside the king range, avoid
+                if (kingMoves.Contains(pos)) continue;
+
+                moves.Add(pos);
+            }
+
+            //right upper diag
+            for (int i = x + 1, j = y + 1; j <= 'h' && i <= '8'; j++, i++)
+            {
+                string pos = $"{(char)j}{(char)i}";
+                //king is blocking, abort
+                if (pos.Equals(king)) break;
+                //its inside the king range, avoid
+                if (kingMoves.Contains(pos)) continue;
+
+                moves.Add(pos);
+            }
+
+            //right lower diag
+            for (int i = x - 1, j = y + 1; j <= 'h' && i >= '1'; j++, i--)
+            {
+                string pos = $"{(char)j}{(char)i}";
+                //king is blocking, abort
+                if (pos.Equals(king)) break;
+                //its inside the king range, avoid
+                if (kingMoves.Contains(pos)) continue;
+
+                moves.Add(pos);
+            }
+
+            return moves;
+        }
+        /// <summary>
+        /// helper
+        /// </summary>
+        public static List<string> RookMoves(string amazon, string king, List<string> kingMoves)
+        {
+            List<string> moves = new List<string>();
+            int x = amazon[1];
+            int y = amazon[0];
+
+            //left
+            for (int j = y - 1; j >= 'a'; j--)
+            {
+                string pos = $"{(char)j}{(char)x}";
+                //king is blocking, abort
+                if (pos.Equals(king)) break;
+                //its inside the king range, avoid
+                if (kingMoves.Contains(pos)) continue;
+
+                moves.Add(pos);
+            }
+
+            //right
+            for (int j = y + 1; j <= 'h'; j++)
+            {
+                string pos = $"{(char)j}{(char)x}";
+                //king is blocking, abort
+                if (pos.Equals(king)) break;
+                //its inside the king range, avoid
+                if (kingMoves.Contains(pos)) continue;
+
+                moves.Add(pos);
+            }
+
+            //up
+            for (int i = x + 1; i <= '8'; i++)
+            {
+                string pos = $"{(char)y}{(char)i}";
+                //king is blocking, abort
+                if (pos.Equals(king)) break;
+                //its inside the king range, avoid
+                if (kingMoves.Contains(pos)) continue;
+
+                moves.Add(pos);
+            }
+
+            //down
+            for (int i = x - 1; i >= '1'; i--)
+            {
+                string pos = $"{(char)y}{(char)i}";
+                //king is blocking, abort
+                if (pos.Equals(king)) break;
+                //its inside the king range, avoid
+                if (kingMoves.Contains(pos)) continue;
+
+                moves.Add(pos);
+            }
+
+            return moves;
+        }
+
+        /// <summary>
+        /// helper
+        /// </summary>
+        public static List<string> KingMoves(string king)
+        {
+            int[][] moves = new int[][]{
+        new int[] {-1, -1}, new int[] {-1, 0}, new int[] { -1,  1},
+        new int[] { 0, -1},                    new int[] {  0,  1},
+        new int[] { 1, -1}, new int[] { 1, 0}, new int[] {  1,  1}};
+            List<string> possibleMoves = new List<string>();
+
+            for (int i = 0; i < moves.Length; i++)
+            {
+                int dx = king[1] + moves[i][0];
+                int dy = king[0] + moves[i][1];
+
+                if (IsInBounds(dx, dy))
+                    possibleMoves.Add($"{(char)dy}{(char)dx}");
+            }
+
+            return possibleMoves;
+        }
+
+        /// <summary>
+        /// helper
+        /// </summary>
+        public static bool IsInBounds(int x, int y)
+        {
+            if (x >= '1' && x <= '8' && y >= 'a' && y <= 'h')
+                return true;
+
+            return false;
+        }
+
+
+        #endregion
+
+
+        /// <remarks>
+        /// Pawn race is a game for two people, played on an ordinary 8 × 8 chessboard. The first player has a white pawn, the second one - a black pawn. Initially the pawns are placed somewhere on the board so that the 1st and the 8th rows are not occupied. Players take turns to make a move.
+        /// 
+        /// White pawn moves upwards, black one moves downwards.The following moves are allowed:
+        /// 
+        /// one-cell move on the same vertical in the allowed direction;
+        /// two-cell move on the same vertical in the allowed direction, if the pawn is standing on the 2nd(for the white pawn) or the 7th(for the black pawn) row.Note that even with the two-cell move a pawn can't jump over the opponent's pawn;
+        /// capture move one cell forward in the allowed direction and one cell to the left or to the right.
+        /// 
+        /// 
+        /// The purpose of the game is to reach the the 1st row(for the black pawn) or the 8th row(for the white one), or to capture the opponent's pawn.
+        /// 
+        /// Given the initial positions and whose turn it is, determine who will win or declare it a draw(i.e.it is impossible for any player to win). Assume that the players play optimally.
+        /// 
+        /// Example
+        /// 
+        /// 
+        /// For white = "e2", black = "e7", and toMove = 'w', the output should be
+        /// pawnRace(white, black, toMove) = "draw";
+        ///         For white = "e3", black = "d7", and toMove = 'b', the output should be
+        /// pawnRace(white, black, toMove) = "black";
+        /// For white = "a7", black = "h2", and toMove = 'w', the output should be
+        /// pawnRace(white, black, toMove) = "white".
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input]
+        ///         string white
+        /// 
+        /// Coordinates of the white pawn in the chess notation.
+        /// 
+        /// [input] string black
+        /// 
+        /// Position of the black pawn in the same notation.It is guaranteed that white ≠ black.
+        /// 
+        /// 
+        /// [input] char toMove
+        /// 
+        /// 'w' if it is the first player's turn, 'b' otherwise.
+        /// 
+        /// [output] string
+        /// 
+        /// "white", "black" or "draw" depending on the result of the game.
+        /// </remarks>
+        public static string PawnRace(string white, string black, char toMove)
+        {
+            int colSpace = Math.Abs(white[0] - black[0]);
+            char wPos = white[1];
+            char bPos = black[1];
+
+            //space between colums > 1 = no capture or white pos >= b
+            if (colSpace > 1 || white[1] >= black[1])
+            {
+                wPos = white[1] == '2' && Math.Abs(white[1] - black[1]) > 3 ? '4' : (char)(white[1] + 1);
+                bPos = black[1] == '7' && Math.Abs(white[1] - black[1]) > 3 ? '5' : (char)(black[1] - 1);
+                int wDis = '8' - wPos;
+                int bDis = bPos - '1';
+
+                if (wDis < bDis)
+                    return "white";
+                else if (wDis > bDis)
+                    return "black";
+                else if (wDis == bDis)
+                    return toMove == 'w' ? "white" : "black";
+            }
+
+            if (white[0] == black[0])
+                return "draw";
+
+            //check if we have a capture situation, otherwise move piece                
+            if (toMove == 'w')
+            {
+                if (black.Equals($"{(char)white[0] + 1}{(char)wPos - 1}") || black.Equals($"{(char)white[0] + 1}{(char)wPos + 1}"))
+                    return "white";
+
+                wPos = white[1] == '2' && Math.Abs(wPos - bPos) > 3 ? '4' : (char)(white[1] + 1);
+            }
+
+            //check if we have a capture situation, otherwise move piece                
+            if (toMove == 'b')
+            {
+                if (white.Equals($"{(char)black[0] + 1}{(char)bPos - 1}") || white.Equals($"{(char)black[0] + 1}{(char)bPos + 1}"))
+                    return "white";
+
+                bPos = black[1] == '7' && Math.Abs(wPos - bPos) > 3 ? '5' : (char)(black[1] - 1);
+            }
+
+            int xOff = Math.Abs(wPos - bPos);
+
+            if (xOff % 2 == 0 && toMove == 'w')
+                return "white";
+            else if (xOff % 2 == 0 && toMove == 'b')
+                return "black";
+            else if (xOff % 2 == 1 && toMove == 'w')
+                return "black";
+            else
+                return "white";
         }
 
 
