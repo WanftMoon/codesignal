@@ -9,25 +9,29 @@ namespace UnitTests
         /// <summary>
         /// 
         /// </summary>
-        [Fact]
-        public void FirstDuplicateTest()
+        [Theory]
+        [InlineData(new int[] { 2, 1, 3, 5, 3, 2 }, 3)]
+        [InlineData(new int[] { 2, 2 }, 2)]
+        [InlineData(new int[] { 2, 4, 3, 5, 1 }, -1)]
+        public void FirstDuplicateTest(int [] input, int expected)
         {
-            //2, 1, 3, 5, 3, 2 = 3
-            int result = FirstDuplicate.Solve(new int[] { 2, 1, 3, 5, 3, 2 });
+            int result = FirstDuplicate.Solve(input);
 
-            Assert.True(result == 3);
+            Assert.True(result == expected);
         }
 
         /// <summary>
         /// 
         /// </summary>
-        [Fact]
-        public void FirstNotRepeatingCharacterTest()
+        [Theory]
+        [InlineData("abacabad", 'c')]
+        [InlineData("abacabaabacaba", '_')]
+        public void FirstNotRepeatingCharacterTest(string input, char expected)
         {
             //abacabad
-            char result = FirstNotRepeatingCharacter.Solve("abacabad");
+            char result = FirstNotRepeatingCharacter.Solve(input);
 
-            Assert.True(result == 'c');
+            Assert.True(result == expected);
         }
 
 

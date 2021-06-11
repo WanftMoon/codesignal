@@ -252,5 +252,188 @@ namespace CodeSignal.Arcade.TheCore
         }
 
 
+        /// <remarks>
+        /// Implement the missing code, denoted by ellipses. You may not modify the pre-existing code.
+        ///         As an avid user of CodeSignal, you find it frustrating that there are no debugging and recovery tasks in your favorite language, PHP.You decide to help the platform by translating solutions in JavaScript into PHP.
+        /// 
+        ///        You quickly discover that this approach is quite convenient: sometimes all you have to do is substitute the function arguments by adding the $ sign in front of them.At first you do this manually, but soon realize that it won't get you far enough.
+        /// 
+        /// Now you need to implement a function that, given a solution written in JavaScript and its args, adds a $ sign in front of each args[i] (unless there is already a dollar sign present).
+        /// 
+        /// Given a solution in JavaScript and its args, return the almost-PHP solution.
+        /// 
+        /// Example
+        /// 
+        /// For
+        /// 
+        /// solution =
+        ///     "function add($n, m) {\t
+        ///        return n + $m;\t
+        ///     }"
+        /// and args = ["n", "m"], the output should be
+        /// 
+        /// programTranslation(solution, args) =
+        ///     "function add($n, $m) {\t
+        ///        return $n + $m;\t
+        /// }
+        /// "
+        /// Input / Output
+        /// 
+        /// [execution time limit] 3 seconds(cs)
+        /// 
+        /// [input] string solution
+        /// 
+        /// Solution written in JavaScript. It is guaranteed that the given code snippet:
+        /// 
+        /// is correct and can be executed in the CodeSignal environment with $ symbols removed;
+        /// does not contain comments or string variables;
+        /// does not start with one of the args.
+        /// Due to system limitations, tabulation (\t) characters are used instead of newlines (\n).
+        /// 
+        /// Guaranteed constraints:
+        /// 40 ≤ solution.length ≤ 200.
+        /// 
+        /// [input] array.string args
+        /// 
+        /// An array of distinct function arguments. It is guaranteed that each argument is valid, i.e. it consists only of uppercase and lowercase letters 'A' through 'Z', the underscore '_' and, except for the first character, the digits '0' through '9'. It is also guaranteed that no argument coincides with one of the reserved words.
+        /// 
+        /// Guaranteed constraints:
+        /// 1 ≤ args.length ≤ 10,
+        /// 1 ≤ args[i].length ≤ 10.
+        /// 
+        /// [output] string
+        /// 
+        /// The given solution with args replaced to PHP-style.
+        /// </remarks>
+        public static string ProgramTranslation(string solution, string[] args)
+        {
+            string argumentVariants = String.Join("|", args);
+            string pattern = "(?<=[^0-9a-zA-Z$_])(" + argumentVariants + ")(?=[^0-9a-zA-Z$_])";
+            string sub = "$$$1";
+            return Regex.Replace(solution, pattern, sub);
+        }
+
+        /// <remarks>
+        /// Implement the missing code, denoted by ellipses. You may not modify the pre-existing code.
+        /// Jane just got a letter from her friend and realized that something's wrong: some words in the letter are written twice in a row. The thing is, she and her friend devised an ingenious cypher, the key to which is the number of pairs of repeated words in the encoded text. The cases of the words don't matter.
+        /// 
+        /// Formally, a word is a substring of letter consisting of English letters, such that characters to the left of the leftmost letter and to the right of the rightmost letter are not letters.
+        /// 
+        /// For obvious reasons, Jane can't tell you how the encryption works, but she needs your help with calculating the number of pairs of consecutive equal words. Write a function that, given a letter, returns this number.
+        /// 
+        /// 
+        /// Example
+        /// 
+        /// For letter = "Hi, hi Jane! I'm so. So glad to to finally be able to write - WRITE!! - to you!",
+        /// the output should be
+        /// repetitionEncryption(letter) = 4.
+        /// 
+        /// 
+        /// There are 4 pairs of consecutive identical words in the text. They are shown in different colors below:
+        /// "Hi, hi Jane! I'm so. So glad to to finally be able to write - WRITE!! - to you!"
+        /// 
+        /// 
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds (cs)
+        /// 
+        /// [input] string letter
+        /// 
+        /// 
+        /// The letter Jane's friend wrote to her. It is guaranteed that there are no more than two consecutive equal words in a row. It is also guaranteed that between two such pairs there are at least two symbols.
+        /// 
+        /// 
+        /// Guaranteed constraints:
+        /// 1 ≤ letter.length ≤ 250.
+        /// 
+        /// 
+        /// [output] integer
+        /// 
+        /// The number of pairs of consecutive equal words in the letter.
+        /// </remarks>
+        public static int RepetitionEncryption(string letter)
+        {
+            Regex regex = new Regex("([a-zA-Z]+)[^a-zA-Z]+\\1(?![a-zA-Z])", RegexOptions.IgnoreCase);
+            return regex.Matches(letter).Count;
+        }
+
+
+        /// <remarks>
+        /// Implement the missing code, denoted by ellipses. You may not modify the pre-existing code.
+        ///   In most role-playing games, die rolls required by the system are given in the form AdX.A and X are positive integers, separated by the letter 'd', which stands for die or dice.
+        /// 
+        ///  A is the number of times the die should be rolled(usually omitted if 1).
+        /// X is the number of faces on the die.
+        /// To this basic notation, an additive modifier can be appended that yields expressions in the form AdX+B or AdX-B.B is a number added to the sum of the rolls (or subtracted from it). So, 1d20-10 would indicate a single roll of a 20-sided die with 10 being subtracted from the result.
+        /// 
+        /// You're reading the rules of a famous Bugs and Bugfixes role-playing game involving dice. What is the maximum number of points you can get, assuming that you roll the dice according to each formula present within rules?
+        /// 
+        /// It is guaranteed that all the formulas that appear in rules are correct (i.e.A and X are always positive in a formula-like substring), and any two substrings that may be formulas do not overlap.
+        /// 
+        /// Example
+        /// 
+        /// 
+        /// For rules = "Roll d6-3 and 4d4+3 to pick a weapon, and finish the boss with 3d7!",
+        /// the output should be
+        /// bugsAndBugfixes(rules) = 43.
+        /// 
+        /// 
+        /// There are three formulas in the rules.
+        /// 
+        /// 
+        /// d6-3 indicates a single roll of a 6-sided die, with 3 subtracted from the result. The maximum number that is possible to get is thus 6 - 3 = 3.
+        /// 4d4+3 stands for 4 rolls of a 4-sided die, with 3 added to the result. It is possible to get 4 * 4 + 3 = 19 points.
+        /// 3d7 means 3 rolls of a 7-sided die. The maximum number to obtain with it is 3 * 7 = 21.
+        /// Input/Output
+        /// 
+        /// [execution time limit] 3 seconds (cs)
+        /// 
+        /// [input] string rules
+        /// 
+        /// 
+        /// Rules given as a string.
+        /// 
+        /// 
+        /// Guaranteed constraints:
+        /// 1 ≤ rules.length ≤ 100.
+        /// 
+        /// 
+        /// [output] integer
+        /// 
+        /// The maximum possible number of points.If there are no formulas in rules, the output should be 0.
+        /// </remarks>
+        public static int BugsAndBugfixes(string rules)
+        {
+            Regex regex = new Regex(@"(\d*)d(\d+)([-+]\d+)*");
+            MatchCollection formulas = regex.Matches(rules);
+
+            int res = 0;
+            foreach (Match match in formulas)
+            {
+                GroupCollection formula = match.Groups;
+                int rolls = String.IsNullOrEmpty(formula[1].Value) ?
+                  1 : Int32.Parse(formula[1].Value);
+                int dieType = Int32.Parse(formula[2].Value);
+                int formulaMax = rolls * dieType;
+
+                if (!String.IsNullOrEmpty(formula[3].Value))
+                {
+                    if (formula[3].Value[0] == '-')
+                    {
+                        formulaMax -= Int32.Parse(formula[3].Value.Substring(1));
+                    }
+                    else
+                    {
+                        formulaMax += Int32.Parse(formula[3].Value.Substring(1));
+                    }
+                }
+
+                res += formulaMax;
+            }
+
+            return res;
+        }
+
+
     }
 }
